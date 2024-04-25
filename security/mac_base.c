@@ -531,7 +531,7 @@ mac_policy_initmach(void)
 	 * modules either linked into the kernel, or loaded before the
 	 * kernel startup.
 	 */
-
+	//panic("lol");
 	if (load_security_extensions_function) {
 		load_security_extensions_function();
 	}

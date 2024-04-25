@@ -353,8 +353,11 @@ kernel_bootstrap_thread(void)
 #ifdef	IOKIT
 	PE_init_iokit();
 #endif
-	
-	(void) spllo();		/* Allow interruptions */
+
+	/* Dies here for qualcomm devices, for some reason. Make sure interrupts are disabled and reenabled before continuing */
+	ml_set_interrupts_enabled(FALSE);
+	ml_set_interrupts_enabled(TRUE);
+	// (void) spllo();		/* Allow interruptions */
 
 #if (defined(__i386__) || defined(__x86_64__)) && NCOPY_WINDOWS > 0
 	/*

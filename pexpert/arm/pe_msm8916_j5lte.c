@@ -56,6 +56,7 @@ vm_offset_t gMsmBlspUartBase;
 /* GIC */
 vm_offset_t         gMsmQGICCPUBase;
 vm_offset_t         gMsmQGICDistributerBase;
+vm_offset_t         gMsmPSHOLDBase;
 
 /* Timer */
 vm_offset_t         gMsmQTimerBase;
@@ -144,7 +145,7 @@ void qtimer_init(void)
 	uint32_t bit = 1 << (INT_QTMR_FRM_0_PHYSICAL_TIMER_EXP & 31);
 	writel(bit, gMsmQGICDistributerBase + reg);
 
-	// Enable interrupts.
+	// Enable interrupts. /* ARE YOU CRAZY */
 	ml_set_interrupts_enabled(TRUE);
 
 	// Enable QTimer.
@@ -415,7 +416,8 @@ void panel_init(void)
 /* Map to SPMI restart function */
 int spmi_halt_restart(int type)
 {
-	writel(1, 0x004AB000);
+	/* Why it no restar */
+	writel(1, gMsmPSHOLDBase);
 	return 0;
 }
 
@@ -424,6 +426,9 @@ void msm8916_mapping_init(void)
 	/* Map gic base and distr */
 	gMsmQGICCPUBase = ml_io_map(MSM_GIC_CPU_BASE, PAGE_SIZE);
 	gMsmQGICDistributerBase = ml_io_map(MSM_GIC_DIST_BASE, PAGE_SIZE);
+
+	/* Map PSHOLD */
+	gMsmPSHOLDBase = ml_io_map(MPM2_MPM_PS_HOLD, PAGE_SIZE);
 
 	return;
 }
